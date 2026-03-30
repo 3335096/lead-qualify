@@ -1,15 +1,5 @@
 import type { QualificationRule, QualificationScoreResponse } from "@lead/shared";
 
-const operators = {
-  eq: (a: unknown, b: unknown) => a === b,
-  ne: (a: unknown, b: unknown) => a !== b,
-  gt: (a: number, b: number) => a > b,
-  gte: (a: number, b: number) => a >= b,
-  lt: (a: number, b: number) => a < b,
-  lte: (a: number, b: number) => a <= b,
-  in: (a: unknown, b: unknown[]) => b.includes(a),
-};
-
 function readPath(source: Record<string, unknown>, path: string): unknown {
   return path.split(".").reduce<unknown>((acc, key) => {
     if (typeof acc !== "object" || acc === null) return undefined;
@@ -28,19 +18,26 @@ function toNumber(value: unknown): number {
 
 function isRuleFired(rule: QualificationRule, filled: Record<string, unknown>): boolean {
   const left = readPath(filled, rule.when.field);
-  const op = operators[rule.when.op];
-  if (!op) return false;
-
-  if (["gt", "gte", "lt", "lte"].includes(rule.when.op)) {
-    return (op as (a: number, b: number) => boolean)(toNumber(left), toNumber(rule.when.value));
+  switch (rule.when.op) {
+    case "eq":
+      return left === rule.when.value;
+    case "ne":
+      return left !== rule.when.value;
+    case "gt":
+      return toNumber(left) > toNumber(rule.when.value);
+    case "gte":
+      return toNumber(left) >= toNumber(rule.when.value);
+    case "lt":
+      return toNumber(left) < toNumber(rule.when.value);
+    case "lte":
+      return toNumber(left) <= toNumber(rule.when.value);
+    case "in": {
+      const expected = Array.isArray(rule.when.value) ? rule.when.value : [rule.when.value];
+      return expected.includes(left);
+    }
+    default:
+      return false;
   }
-
-  if (rule.when.op === "in") {
-    const expected = Array.isArray(rule.when.value) ? rule.when.value : [rule.when.value];
-    return (op as (a: unknown, b: unknown[]) => boolean)(left, expected);
-  }
-
-  return (op as (a: unknown, b: unknown) => boolean)(left, rule.when.value);
 }
 
 export function scoreQualification(

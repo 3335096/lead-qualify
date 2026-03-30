@@ -1,0 +1,237 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  owner
+  admin
+  manager
+  agent
+}
+
+enum LeadStatus {
+  new
+  in_qualification
+  awaiting_client
+  awaiting_operator
+  qualified
+  in_contact
+  won
+  not_target
+  no_answer
+  duplicate
+  spam_test
+  lost
+}
+
+enum DictionarySource {
+  manual
+  sheets
+}
+
+enum HttpMethod {
+  GET
+  POST
+  PUT
+  PATCH
+  DELETE
+}
+
+enum JobStatus {
+  pending
+  running
+  done
+  failed
+  cancelled
+}
+
+model workspace {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users                app_user[]
+  contacts             contact[]
+  leads                lead[]
+  conversations        conversation[]
+  messages             message[]
+  qualificationSchemas qualification_schema[]
+  dictionaries         dictionary[]
+  outboundIntegrations outbound_integration[]
+  jobs                 job_queue[]
+}
+
+model app_user {
+  id           String   @id @default(cuid())
+  workspaceId  String
+  email        String   @unique
+  passwordHash String
+  role         UserRole
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  workspace workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+}
+
+model contact {
+  id           String   @id @default(cuid())
+  workspaceId  String
+  displayName  String?
+  phone_enc    Bytes?
+  email_enc    Bytes?
+  telegramUser String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  workspace     workspace      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  leads         lead[]
+  conversations conversation[]
+
+  @@index([workspaceId])
+}
+
+model lead {
+  id             String     @id @default(cuid())
+  workspaceId    String
+  contactId      String
+  status         LeadStatus @default(new)
+  reason_group   String?
+  reason_code    String?
+  niche          String
+  score          Int        @default(0)
+  coverage       Float      @default(0)
+  auto_qualified Boolean    @default(false)
+  notes          Json?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  workspace     workspace      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  contact       contact        @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  conversations conversation[]
+  messages      message[]
+
+  @@index([workspaceId, contactId, createdAt])
+  @@index([status, reason_code])
+}
+
+model conversation {
+  id                 String   @id @default(cuid())
+  workspaceId        String
+  leadId             String
+  contactId          String
+  chat_id            String
+  firstResponseDueAt DateTime?
+  inactivityDueAt    DateTime?
+  closedAt           DateTime?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  workspace workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  lead      lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  contact   contact   @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  messages  message[]
+
+  @@unique([workspaceId, chat_id])
+  @@index([inactivityDueAt, firstResponseDueAt])
+}
+
+model message {
+  id             String   @id @default(cuid())
+  workspaceId    String
+  leadId         String
+  conversationId String
+  text           String?
+  telegram_raw   Json
+  createdAt      DateTime @default(now())
+
+  workspace    workspace    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  lead         lead         @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  conversation conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId, leadId, conversationId])
+}
+
+model qualification_schema {
+  id         String   @id @default(cuid())
+  workspaceId String
+  niche      String
+  version    Int
+  schema     Json
+  active     Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  workspace workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, niche, version])
+  @@index([workspaceId, niche, active])
+}
+
+model dictionary {
+  id          String           @id @default(cuid())
+  workspaceId String
+  name        String
+  source      DictionarySource @default(manual)
+  sheet_url   String?
+  sheet_map   Json?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  workspace workspace         @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  items     dictionary_item[]
+
+  @@index([workspaceId, name])
+}
+
+model dictionary_item {
+  id           String   @id @default(cuid())
+  dictionaryId String
+  code         String
+  value        String
+  meta         Json?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  dictionary dictionary @relation(fields: [dictionaryId], references: [id], onDelete: Cascade)
+
+  @@unique([dictionaryId, code])
+}
+
+model outbound_integration {
+  id          String     @id @default(cuid())
+  workspaceId String
+  endpoint    String
+  method      HttpMethod @default(POST)
+  headers     Json?
+  body_map    Json?
+  retries     Int        @default(3)
+  active      Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  workspace workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId, active])
+}
+
+model job_queue {
+  id          String    @id @default(cuid())
+  workspaceId String
+  type        String
+  payload     Json
+  run_at      DateTime
+  attempts    Int       @default(0)
+  status      JobStatus @default(pending)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  workspace workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId, type, status, run_at])
+}

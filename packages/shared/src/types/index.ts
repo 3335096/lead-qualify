@@ -36,7 +36,7 @@ export interface QualificationRule {
   weight: number;
   when: {
     field: string;
-    op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "in" | "contains";
+    op: "eq" | "ne" | "gt" | "gte" | "lt" | "lte" | "in";
     value: unknown;
   };
 }
