@@ -7,3 +7,4 @@ coverage
 .env.local
 apps/api/prisma/migrations
 .DS_Store
+apps/web/tsconfig.tsbuildinfo

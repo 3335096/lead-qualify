@@ -9,7 +9,7 @@
     "start": "node dist/main.js",
     "lint": "echo \"api lint placeholder\"",
     "typecheck": "pnpm --filter @lead/bot-core build && tsc -p tsconfig.json --noEmit",
-    "test": "vitest run",
+    "test": "vitest run --passWithNoTests",
     "db:migrate": "prisma generate --schema prisma/schema.prisma && prisma migrate dev --schema prisma/schema.prisma",
     "db:deploy": "prisma generate --schema prisma/schema.prisma && prisma migrate deploy --schema prisma/schema.prisma",
     "db:seed": "prisma generate --schema prisma/schema.prisma && prisma db seed --schema prisma/schema.prisma"

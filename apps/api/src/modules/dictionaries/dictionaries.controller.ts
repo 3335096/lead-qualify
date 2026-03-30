@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -20,9 +21,19 @@ export class DictionariesController {
     return { items: [], source: source ?? null };
   }
 
+  @Get(":id")
+  getOne(@Param("id") id: string) {
+    return { id, item: null };
+  }
+
   @Patch(":id")
   update(@Param("id") id: string, @Body() body: unknown) {
     return { id, updated: true, payload: body };
+  }
+
+  @Delete(":id")
+  remove(@Param("id") id: string) {
+    return { id, deleted: true };
   }
 
   @Post(":id/sync")

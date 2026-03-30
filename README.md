@@ -4,17 +4,20 @@ Monorepo built with pnpm + Turborepo.
 
 ## Apps
 
-- `apps/api` - NestJS API + Prisma
-- `apps/web` - Next.js web panel
+- `apps/api` - NestJS API + Prisma + BullMQ + grammY webhook endpoint
+- `apps/web` - Next.js App Router admin panel (Tailwind + shadcn/ui-style components)
 
 ## Packages
 
-- `packages/shared` - shared types and security helpers
-- `packages/bot-core` - LLM orchestrator and Telegram runtime
+- `packages/shared` - shared DTO/types and security helpers (`encryptPII`, `decryptPII`, PII masking)
+- `packages/bot-core` - LLM extraction orchestrator, Telegram bot runtime, scoring/status logic
 
 ## Infra
 
-- `infra` - docker and local environment bootstrap
+- `infra/docker-compose.yml` - local PostgreSQL + Redis
+- `infra/Dockerfile.api` - API container
+- `infra/Dockerfile.web` - Web container
+- `.env.example` - full env configuration template
 
 ## Commands
 
@@ -23,4 +26,6 @@ Monorepo built with pnpm + Turborepo.
 - `pnpm lint`
 - `pnpm typecheck`
 - `pnpm test`
-# lead-qualify
+- `pnpm db:migrate`
+- `pnpm db:deploy`
+- `pnpm db:seed`
