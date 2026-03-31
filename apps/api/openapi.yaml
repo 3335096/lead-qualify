@@ -1,0 +1,19 @@
+openapi: 3.0.3
+info:
+  title: Lead Qualify API
+  version: "1.0.0"
+servers:
+  - url: https://api.example.com/v1
+paths:
+  /bot/telegram/webhook:
+    post:
+      summary: Telegram webhook
+      responses: { '200': { description: ok } }
+  /llm/extract:
+    post:
+      summary: LLM extraction
+      responses: { '200': { description: result } }
+  /qualification/score:
+    post:
+      summary: Score calculation
+      responses: { '200': { description: score } }

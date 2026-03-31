@@ -1,31 +1,19 @@
-# lead-qualify monorepo
+# Lead Qualify MVP (Telegram + LLM)
 
-Monorepo built with pnpm + Turborepo.
+Цель: повысить долю квалифицированных лидов $Qualified\ Rate$ с помощью LLM-квалификации в Telegram, гибких схем и лёгкой CRM.
 
-## Apps
+Быстрый старт:
+1) Скопируйте `.env.example` в `.env` (локально) или задайте переменные в Railway.
+2) Примените миграции: `pnpm --filter apps/api exec prisma migrate deploy`.
+3) `pnpm --filter apps/api exec prisma db seed`.
+4) Установите Telegram webhook (см. docs/PROJECT_OVERVIEW.md).
 
-- `apps/api` - NestJS API + Prisma + BullMQ + grammY webhook endpoint
-- `apps/web` - Next.js App Router admin panel (Tailwind + shadcn/ui-style components)
-
-## Packages
-
-- `packages/shared` - shared DTO/types and security helpers (`encryptPII`, `decryptPII`, PII masking)
-- `packages/bot-core` - LLM extraction orchestrator, Telegram bot runtime, scoring/status logic
-
-## Infra
-
-- `infra/docker-compose.yml` - local PostgreSQL + Redis
-- `infra/Dockerfile.api` - API container
-- `infra/Dockerfile.web` - Web container
-- `.env.example` - full env configuration template
-
-## Commands
-
-- `pnpm dev`
-- `pnpm build`
-- `pnpm lint`
-- `pnpm typecheck`
-- `pnpm test`
-- `pnpm db:migrate`
-- `pnpm db:deploy`
-- `pnpm db:seed`
+Документация:
+- docs/PROJECT_OVERVIEW.md — обзор, статусы, причины, ниши
+- docs/TECH_SPEC.md — подробное ТЗ
+- docs/ITERATION_PLAN.md — итерации и критерия приёмки
+- docs/ITERATION_STATUS.json — статус итераций (оркестрация)
+- docs/CURSOR_PROMPTS.md — промпты для Cursor
+- docs/SECURITY_PDN.md — безопасность и ПДн (РБ)
+- docs/db/001_init.sql — DDL (референс)
+- apps/api/openapi.yaml — API контракт (черновик)
