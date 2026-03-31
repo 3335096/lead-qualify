@@ -1,0 +1,12 @@
+{
+  "current": "I1",
+  "iterations": {
+    "I1": { "title": "Bootstrap", "status": "pending" },
+    "I2": { "title": "LLM Orchestrator", "status": "pending" },
+    "I3": { "title": "Schemas & Dictionaries", "status": "pending" },
+    "I4": { "title": "CRM Inbox", "status": "pending" },
+    "I5": { "title": "SLA Daemon", "status": "pending" },
+    "I6": { "title": "Outbound & Dashboard", "status": "pending" },
+    "I7": { "title": "Polish & Security", "status": "pending" }
+  }
+}

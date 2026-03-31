@@ -1,0 +1,55 @@
+{
+  "name": "@apps/api",
+  "version": "0.0.1",
+  "private": true,
+  "main": "dist/main.js",
+  "scripts": {
+    "dev": "nest start --watch",
+    "build": "nest build",
+    "start": "node dist/main.js",
+    "lint": "echo \"api lint placeholder\"",
+    "typecheck": "pnpm --filter @lead/bot-core build && tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "db:migrate": "prisma generate --schema prisma/schema.prisma && prisma migrate dev --schema prisma/schema.prisma",
+    "db:deploy": "prisma generate --schema prisma/schema.prisma && prisma migrate deploy --schema prisma/schema.prisma",
+    "db:seed": "prisma generate --schema prisma/schema.prisma && prisma db seed --schema prisma/schema.prisma"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
+  "dependencies": {
+    "@lead/bot-core": "workspace:*",
+    "@lead/shared": "workspace:*",
+    "@nestjs/bullmq": "^11.0.4",
+    "@nestjs/common": "^11.1.17",
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/core": "^11.1.17",
+    "@nestjs/jwt": "^11.0.1",
+    "@nestjs/passport": "^11.0.5",
+    "@nestjs/platform-express": "^11.1.17",
+    "@nestjs/schedule": "^6.0.1",
+    "@prisma/client": "^6.7.0",
+    "bullmq": "^5.58.5",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
+    "jsonwebtoken": "^9.0.2",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
+    "zod": "^4.1.11"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^11.0.16",
+    "@nestjs/schematics": "^11.0.9",
+    "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^24.5.2",
+    "@types/passport-jwt": "^4.0.1",
+    "prisma": "^6.7.0",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  }
+}

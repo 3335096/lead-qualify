@@ -1,0 +1,17 @@
+Ты — «Оркестратор итераций». Прочитай `docs/ITERATION_STATUS.json` и `docs/ITERATION_PLAN.md`, определи текущую итерацию (поле "current") и выполни её задачи. После реализации:
+1) Прогони линтеры/тесты. 
+2) Обнови `docs/ITERATION_STATUS.json`: пометь текущую как "done", выставь "current" на следующую (I2→I3 и т.д.).
+3) Обнови `CHANGELOG.md` (создай, если нет) с кратким списком изменений.
+4) Предложи коммит-сообщение вида: `feat(iteration): I{n} — <кратко>`.
+5) Спроси подтверждение перед применением следующей итерации.
+
+Для каждой итерации используй следующие ориентиры:
+- И1 Bootstrap: создать базовые модули, Prisma схемы+миграции, webhook с валидацией секрета, JWT auth.
+- И2 LLM Orchestrator: реализовать `/v1/llm/extract`, OpenRouter client, tool-calling, unit тесты на 3 ниши.
+- И3 Schemas & Dictionaries: CRUD, Monaco Editor, Google Sheets sync.
+- И4 CRM Inbox: UI/реалтайм, статусы+reason_code (валидация), отправка в TG.
+- И5 SLA Daemon: BullMQ джобы, напоминания/автозакрытия.
+- И6 Outbound & Dashboard: универсальный маппинг, ретраи, DLQ UI, метрики summary.
+- И7 Polish & Security: маскирование PII, аудит, OpenAPI, seed ниш, доки.
+
+Если встречаются блокеры (настройка ключей и пр.) — сгенерируй заглушки и оставь TODO.

@@ -1,0 +1,32 @@
+{
+  "not_target": [
+    { "code": "geo_out_of_area", "label": "Вне зоны обслуживания" },
+    { "code": "service_not_provided", "label": "Услуга не предоставляется" },
+    { "code": "budget_too_low", "label": "Бюджет ниже порога" },
+    { "code": "audience_mismatch", "label": "Не тот тип клиента/ограничения" },
+    { "code": "compliance_restriction", "label": "Юридические/этические ограничения" }
+  ],
+  "no_answer": [
+    { "code": "silent_after_first", "label": "Нет ответа после первого сообщения" },
+    { "code": "silent_after_questions", "label": "Нет ответа после уточнений" },
+    { "code": "wrong_contacts", "label": "Неверный/недоступный контакт" },
+    { "code": "abandoned_timeout", "label": "Покинул диалог (таймаут)" }
+  ],
+  "duplicate": [
+    { "code": "recent_duplicate", "label": "Повтор в окне дедупликации" },
+    { "code": "same_contact_open_case", "label": "Есть открытое обращение" }
+  ],
+  "spam_test": [
+    { "code": "spam_bot", "label": "Спам/бот" },
+    { "code": "irrelevant_message", "label": "Нерелевантные сообщения" },
+    { "code": "internal_test", "label": "Внутренний тест" }
+  ],
+  "lost": [
+    { "code": "chose_competitor", "label": "Выбрал конкурента" },
+    { "code": "price_too_high", "label": "Цена не устроила" },
+    { "code": "timing_issue", "label": "Сроки не подходят/нет слотов" },
+    { "code": "not_urgent_anymore", "label": "Потеря срочности/передумал" },
+    { "code": "capacity_full", "label": "Не смогли принять (нет ресурсов)" },
+    { "code": "already_resolved", "label": "Проблема уже решена" }
+  ]
+}
